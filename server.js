@@ -15,7 +15,7 @@ const generateTokenID = function () {
 const app = express();
 app.use(cookieParser());
 
-app.get("/authorize", (req, res) => {
+app.get("/authenticate", (req, res) => {
     let origin;
 
     if (!req.query["origin"]) {
