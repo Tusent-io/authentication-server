@@ -16,8 +16,12 @@ const app = express();
 app.use(cookieParser());
 
 app.get("/authorize", (req, res) => {
+    let origin;
+
     if (!req.query["origin"]) {
         return res.status(400).send("Bad Request");
+    } else {
+        origin = decodeURIComponent(req.query["origin"]);
     }
 
     let id = generateTokenID();
@@ -30,7 +34,7 @@ app.get("/authorize", (req, res) => {
     }
 
     Token.create({ id: id, user: user, created: Date.now() }, (_, token) => {
-        res.redirect(`${req.query["origin"]}?tokenid=${token.id}`);
+        res.redirect(`${origin}?tokenid=${token.id}`);
     });
 });
 
