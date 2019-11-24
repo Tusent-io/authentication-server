@@ -15,9 +15,13 @@ const generateTokenID = function () {
 const app = express();
 app.use(cookieParser());
 
-app.get("/authorize", (req, res) => {
+app.get("/authenticate", (req, res) => {
+    let origin;
+
     if (!req.query["origin"]) {
         return res.status(400).send("Bad Request");
+    } else {
+        origin = decodeURIComponent(req.query["origin"]);
     }
 
     let id = generateTokenID();
@@ -29,8 +33,8 @@ app.get("/authorize", (req, res) => {
         res.cookie("session_token", "", { maxAge: 0, httpOnly: true, secure: true });
     }
 
-    Token.create({ id: id, user: user }, (_, token) => {
-        res.redirect(`${req.query["origin"]}?tokenid=${token.id}`);
+    Token.create({ id: id, user: user, created: Date.now() }, (_, token) => {
+        res.redirect(`${origin}?tokenid=${token.id}`);
     });
 });
 
