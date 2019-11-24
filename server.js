@@ -34,7 +34,8 @@ app.get("/authenticate", (req, res) => {
     }
 
     Token.create({ id: id, user: user, created: Date.now() }, (_, token) => {
-        res.redirect(`${origin}?tokenid=${token.id}`);
+        let escapedTokenID = encodeURIComponent(token.id);
+        res.redirect(`${origin}?tokenid=${escapedTokenID}`);
     });
 });
 
