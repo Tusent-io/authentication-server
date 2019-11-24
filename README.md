@@ -1,1 +1,1 @@
-# tusent-io-authentication-server
+# Tusent.io Authentication Server
