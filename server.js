@@ -29,7 +29,7 @@ app.get("/authorize", (req, res) => {
         res.cookie("session_token", "", { maxAge: 0, httpOnly: true, secure: true });
     }
 
-    Token.create({ id: id, user: user }, (_, token) => {
+    Token.create({ id: id, user: user, created: Date.now() }, (_, token) => {
         res.redirect(`${req.query["origin"]}?tokenid=${token.id}`);
     });
 });
