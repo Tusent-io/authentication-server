@@ -8,7 +8,7 @@ const express = require("express");
 mongoose.connect(config.databaseUri, { useNewUrlParser: true, useUnifiedTopology: true });
 const Token = mongoose.model("Token", { id: String, user: Object, created: Date });
 
-const generateTokenID = function () {
+const generateSSOID = function () {
     return crypto.randomBytes(72).toString('base64');
 }
 
@@ -24,7 +24,7 @@ app.get("/authenticate", (req, res) => {
         origin = decodeURIComponent(req.query["origin"]);
     }
 
-    let id = generateTokenID();
+    let id = generateSSOID();
     let user = null;
 
     try {
@@ -35,7 +35,7 @@ app.get("/authenticate", (req, res) => {
 
     Token.create({ id: id, user: user, created: Date.now() }, (_, token) => {
         let escapedTokenID = encodeURIComponent(token.id);
-        res.redirect(`${origin}?tokenid=${escapedTokenID}`);
+        res.redirect(`${origin}?ssoid=${escapedTokenID}`);
     });
 });
 
