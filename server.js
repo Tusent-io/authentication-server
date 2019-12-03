@@ -46,7 +46,9 @@ app.get("/authenticate", (req, res) => {
         res.cookie("session_token", "", { maxAge: 0, httpOnly: true, secure: true });
     }
 
-    Token.create({ id: id, user: user, created: Date.now() }, (_, token) => {
+    Token.create({ id: id, user: user, created: Date.now() }, (err, token) => {
+        if (err) return res.status(500).send("Internal Server Error");
+
         let escapedTokenID = encodeURIComponent(token.id);
         res.redirect(`${origin}?ssoid=${escapedTokenID}`);
     });
