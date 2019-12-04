@@ -5,11 +5,17 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const express = require("express");
-const authMiddleware = require("@tusent.io/authentication-middleware")();
+const authMiddleware = require("@tusent.io/authentication-middleware")({
+    secure: config.secure,
+    databaseUri: config.databaseUri,
+    ssoHostname:
+        `${config.hostname}`
+        + (config.port != 443 && config.port != 80 ? `:${config.port}` : "")
+});
 
 mongoose.connect(config.databaseUri, { useNewUrlParser: true, useUnifiedTopology: true });
-const Token = mongoose.model("Token", { id: String, user: Object, created: Date });
 const User = mongoose.model("User", { id: String, email: String, pword_hash: String, profile: Object });
+const Token = mongoose.model("Token"); // Already compiled in '@tusent.io/authentication-middleware'.
 
 const generateSSOID = function () {
     return crypto.randomBytes(72).toString('base64');
