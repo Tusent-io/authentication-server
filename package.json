@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/Tusent-io/tusent-io-authentication-server#readme",
   "dependencies": {
-    "@tusent.io/authentication-middleware": "^1.0.0",
+    "@tusent.io/authentication-middleware": "^1.0.1",
     "bcrypt": "^3.0.7",
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
