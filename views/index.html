@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Sign in or register a Tusent.io account">
+
+        <link rel="stylesheet" href="/styles/main.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+        <title>Tusent.io - Sign In or Register</title>
+    </head>
+    <body>
+        <div id="wrapper">
+            <header>
+                <div>
+                    <img src="/images/tusent.io-logo.svg" alt="Tusent.io Logo">
+                </div>
+            </header>
+            <main>
+                <div id="dialog">
+                    <!-- Sign In -->
+                    <section v-if="forgotPass.hidden">
+                        <div>
+                            <h1>SIGN IN</h1>
+                            <h2>Sign in to your existing Tusent.io Account</h2>
+                            <input type="email" v-model="signIn.email" aria-label="Email" spellcheck="false" placeholder="Email...">
+                            <input type="password" v-model="signIn.password" aria-label="Password" placeholder="Password...">
+                            <a href="#" @click="forgotPass.hidden = false">I have forgotten my password</a>
+                            <p>By signing in and using our web applications, you are agreeing to our use of cookies on ya SYSTEM NIGGA.</p>
+                        </div>
+                        <button @click="submit_signIn">
+                            <img src="/images/arrow_right.svg" alt="Submit">
+                        </button>
+                    </section>
+
+                    <!-- Forgot Password -->
+                    <section v-if="!forgotPass.hidden">
+                        <div>
+                            <h1>FORGOT PASSWORD</h1>
+                            <h2>Restore your password</h2>
+                            <input type="email" v-model="forgotPass.email" aria-label="Email" spellcheck="false" placeholder="Email...">
+                            <a href="#" @click="forgotPass.hidden = true">Back to sign in</a>
+                        </div>
+                        <button @click="submit_forgotPass">
+                            <img src="/images/arrow_right.svg" alt="Submit">
+                        </button>
+                    </section>
+
+                    <!-- Register -->
+                    <section>
+                        <div>
+                            <h1>REGISTER</h1>
+                            <h2>Create a new Tusent.io account</h2>
+                            <input type="email" v-model="forgotPass.email" aria-label="Email" spellcheck="false" placeholder="Email...">
+                            <input type="password" v-model="forgotPass.password" aria-label="Password" placeholder="Password...">
+                            <input type="password" v-model="forgotPass.repeatPassword" aria-label="Repeat Password" placeholder="Repeat Password...">
+
+                            <!-- Recaptcha -->
+                            <form action="?" method="POST">
+                                <div class="g-recaptcha" data-sitekey="6LfiVaYUAAAAAMILAGAp312D7ZyVHtgJBu7c23vh"></div>
+                                <br/>
+                                <input style="display: none" type="submit" value="Submit">
+                            </form>
+
+                        </div>
+                        <button @click="submit_register">
+                            <img src="/images/arrow_right.svg" alt="Submit">
+                        </button>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Info Message -->
+            <footer v-if="info != ''">
+                <div>
+                    <img src="/images/information.svg" alt="Information">
+                    <p>{{info}}</p>
+                    <button @click="closeInfoMSG">
+                        <img src="/images/close.svg" alt="Close">
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </body>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="/scripts/axios.js"></script>
+    <script src="/scripts/vue.js"></script>
+    <script src="/scripts/main.js"></script>
+</html>

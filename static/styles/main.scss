@@ -1,0 +1,232 @@
+$gray: #4D4D4D;
+$hover: rgb(240, 240, 240);
+$active: rgb(230, 230, 230);
+$responsive-width: 800px;
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    outline: none;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    background: url("/images/background1.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#wrapper {
+    height: 100%;
+    max-width: $responsive-width;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+
+    header {
+        order: 0;
+        min-height: max-content;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+
+        div {
+            display: flex;
+            justify-content: center;
+            padding: .8rem 1.8rem;
+            background: $gray;
+
+            img {
+                width: 3rem;
+                height: 2rem;
+            }
+        }
+    }
+
+    main {
+        order: 1;
+        min-height: max-content;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+
+        > div {
+            margin-bottom: 15%;
+            display: flex;
+            flex-direction: row;
+            box-shadow: 0 .4rem 1rem rgba(0, 0, 0, 0.1);
+            background: white;
+
+            section {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+    
+                div {
+                    /*overflow: auto;*/
+                    padding: 2rem 2rem 1rem 2rem;
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+    
+                    h1 {
+                        text-transform: uppercase;
+                        font-size: 1.1rem;
+                        color: $gray;
+                        margin-bottom: .2rem;
+                    }
+    
+                    h2 {
+                        font-size: .9rem;
+                        color: $gray;
+                        margin-bottom: 1rem;
+                    }
+
+                    input {
+                        border: none;
+                        background: #F2F2F2;
+                        padding: .4rem .8rem;
+                        margin-bottom: .5rem;
+                        color: #000000;
+
+                        &:hover {
+                            background: $hover;
+                        }
+                        &:active, &:focus {
+                            background: $active;
+                        }
+
+                        &::placeholder {
+                            color: #666666;
+                        }
+                    }
+
+                    a, p {
+                        font-size: .8rem;
+                        color: $gray;
+                        margin: .5rem 0;
+                    }
+
+                    form {
+                        padding: 0;
+                        margin: auto;
+
+                        > *, > * > *, > * > * > * {
+                            margin: 0;
+                            padding: 0;
+                        }
+                    }
+                }
+    
+                button {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border: none;
+                    background: none;
+                    padding: 1rem 0;
+                    cursor: pointer;
+
+                    &:hover {
+                        background: $hover;
+                    }
+                    &:active {
+                        background: $active;
+                    }
+    
+                    img {
+                        width: 1rem;
+                        height: 1rem;
+                    }
+                }
+            }
+        }
+    }
+
+    > footer {
+        order: 2;
+        min-height: max-content;
+        padding: 1.5rem 1.5rem;
+        background: $gray;
+
+        div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            img {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+    
+            p {
+                flex: 1;
+                color: #ffffff;
+                font-size: .9rem;
+                margin-left: 1.5rem;
+            }
+    
+            button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: none;
+                background: none;
+                cursor: pointer;
+                padding: .4rem;
+                border-radius: 100%;
+                
+                &:hover {
+                    background: black;
+                    filter: invert(100%);
+                }
+
+                &:active {
+                    opacity: .6;
+                }
+                
+                img {
+                    width: .8rem;
+                    height: .8rem;
+                }
+            }
+        }
+    }
+
+    @media screen and (max-width: $responsive-width) {
+        header {
+            justify-content: stretch;
+            div {
+                width: 100%;
+            }
+        }
+        main {
+            flex: none;
+
+            > div {
+                flex-direction: column;
+                margin-bottom: 0;
+    
+                section {
+                    flex: none;
+                    height: unset;
+                    &:nth-child(1) {
+                        border-bottom: 1px solid rgb(220, 220, 220);
+                    }
+                }
+            }
+        }
+        footer {
+            order: 0;
+        }
+    }
+}
