@@ -22,19 +22,21 @@ const generateSSOID = function () {
 }
 
 const app = express();
+app.use(express.static("static"))
 app.use(cookieParser());
 
 app.get("/", authMiddleware.authenticate, (req, res) => {
-    req.status(200);
+    res.status(200);
 
     if (req.user) {
         res.sendFile("views/userpage.html", { root: __dirname });
     } else {
-        res.sendFile("views/signin.html", { root: __dirname });
+        res.sendFile("views/index.html", { root: __dirname });
     }
 });
 
 app.get("/authenticate", (req, res) => {
+    console.log("Authenticator saying 'Hi!'");
     let origin;
 
     if (!req.query["origin"]) {
