@@ -36,7 +36,6 @@ app.get("/", authMiddleware.authenticate, (req, res) => {
 });
 
 app.get("/authenticate", (req, res) => {
-    console.log("Authenticator saying 'Hi!'");
     let origin;
 
     if (!req.query["origin"]) {
