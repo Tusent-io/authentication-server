@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Tusent-io/tusent-io-authentication-server#readme",
   "dependencies": {
+    "@sendgrid/mail": "^6.5.0",
     "@tusent.io/authentication-middleware": "^1.0.2",
     "bcrypt": "^3.0.7",
     "cookie-parser": "^1.4.4",
