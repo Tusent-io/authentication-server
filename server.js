@@ -60,8 +60,7 @@ function normalizeEmailAddress(address) {
     if (addressParts.length != 2) {
         throw new Error("Invalid email address!");
     } else {
-        addressParts[1] = addressParts[1].toLowerCase();
-        address = addressParts.join("@");
+        address = address.toLowerCase();
     }
 
     return address;
@@ -88,8 +87,8 @@ function isNullOrEmpty(obj) {
 }
 
 function cleanupDB() {
-    Token.remove({ created: { $gt: Date.now() - config.ssoTokenLifetime } });
-    RegRequest.remove({ created: { $gt: Date.now() - config.regRequestLifetime } });
+    Token.remove({ created: { $lt: Date.now() - config.ssoTokenLifetime } });
+    RegRequest.remove({ created: { $lt: Date.now() - config.regRequestLifetime } });
 }
 
 app.get("/", authMiddleware.authenticate, (req, res) => {
