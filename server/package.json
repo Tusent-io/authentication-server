@@ -1,21 +1,21 @@
 {
-  "name": "tusent-io-authentication-server",
+  "name": "@tusent.io/authentication-server",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "node ."
+    "start": "node ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tusent-io/tusent-io-authentication-server.git"
+    "url": "git+https://github.com/Tusentio/authentication.git"
   },
   "author": "Kevin Sundqvist Norlén",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/Tusent-io/tusent-io-authentication-server/issues"
+    "url": "https://github.com/Tusentio/authentication/issues"
   },
-  "homepage": "https://github.com/Tusent-io/tusent-io-authentication-server#readme",
+  "homepage": "https://github.com/Tusentio/authentication/tree/master/server#readme",
   "dependencies": {
     "@sendgrid/mail": "^6.5.0",
     "@tusent.io/authentication-middleware": "^1.0.2",
