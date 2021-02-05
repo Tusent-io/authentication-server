@@ -1,0 +1,25 @@
+{
+    "name": "@tusent.io/authentication-middleware",
+    "version": "1.2.0",
+    "description": "",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "files": [
+        "./index.js",
+        "./index.d.ts"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Tusentio/authentication.git"
+    },
+    "author": "Kevin Sundqvist Norlén",
+    "license": "UNLICENCED",
+    "bugs": {
+        "url": "https://github.com/Tusentio/authentication/issues"
+    },
+    "homepage": "https://github.com/Tusentio/authentication/tree/master/@tusent.io/authentication-middleware#readme",
+    "dependencies": {
+        "axios": "^0.20.0",
+        "cookie-parser": "^1.4.4"
+    }
+}
