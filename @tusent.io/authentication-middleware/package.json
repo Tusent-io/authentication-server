@@ -19,7 +19,7 @@
     },
     "homepage": "https://github.com/Tusentio/authentication/tree/master/@tusent.io/authentication-middleware#readme",
     "dependencies": {
-        "axios": "^0.20.0",
+        "axios": "^0.21.1",
         "cookie-parser": "^1.4.4"
     }
 }
