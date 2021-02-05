@@ -1,0 +1,17 @@
+{
+    "name": "@tusent.io/authentication-server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "start": "node ."
+    },
+    "author": "Kevin Sundqvist Norlén",
+    "license": "UNLICENSED",
+    "dependencies": {
+        "@tusent.io/filter-queries": "^1.0.0",
+        "cookie-parser": "^1.4.5",
+        "express": "^4.17.1",
+        "jsonwebtoken": "^8.5.1"
+    }
+}
