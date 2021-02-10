@@ -6,7 +6,7 @@ const util = require("util");
  * Get the full requested URL and filter out any query strings with the name "sso".
  */
 function getOrigin(req) {
-    let origin = `${req.protocol}://${req.get("host")}${req.path}?`;
+    let origin = `${req.protocol}://${req.get("host")}${req.originalUrl}?`;
 
     for (let [key, value] of Object.entries(req.query)) {
         if (key != "sso") origin += `${key}=${value}&`;
