@@ -77,8 +77,8 @@ module.exports = function (options = {}) {
                 verifyUrl.searchParams.set("sso", encodeURIComponent(ssoid));
                 verifyUrl.searchParams.set("api_key", encodeURIComponent(apiKey));
 
-                const response = await axios.get(verifyUrl);
-                user = JSON.parse(response.data);
+                const response = await axios.get(verifyUrl.href);
+                user = response.data;
             } catch (err) {
                 if (err.response && err.response.status === 404) {
                     authenticateUrl.searchParams.set("origin", encodeURIComponent(origin));
