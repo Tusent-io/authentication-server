@@ -25,10 +25,9 @@ app.get("/authenticate", filterQueries("origin"), (req, res) => {
     }
 
     try {
-        const origin = new URL(decodeURIComponent(req.query["origin"]));
+        const origin = new URL(req.query["origin"]);
         const ssoid = tokenStore.register(user);
-
-        origin.searchParams.set("sso", encodeURIComponent(ssoid));
+        origin.searchParams.set("sso", ssoid);
 
         return res.redirect(origin.href);
     } catch {
@@ -38,13 +37,13 @@ app.get("/authenticate", filterQueries("origin"), (req, res) => {
 
 // API
 app.get("/verify", filterQueries("sso", "api_key"), (req, res) => {
-    const apiKey = decodeURIComponent(req.query["api_key"]);
+    const apiKey = req.query["api_key"];
 
     if (!apiKeys.has(apiKey)) {
         return res.status(403).send("Forbidden");
     }
 
-    const ssoid = decodeURIComponent(req.query["sso"]);
+    const ssoid = req.query["sso"];
     const user = tokenStore.use(ssoid);
 
     if (user == null) {

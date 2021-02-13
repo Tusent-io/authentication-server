@@ -41,7 +41,7 @@ module.exports = function (options = {}) {
         let origin = getOrigin(req);
 
         if (req.query["sso"] != null && req.query["sso"].length > 0) {
-            let ssoid = decodeURIComponent(req.query["sso"]);
+            let ssoid = req.query["sso"];
 
             res.cookie("sso", ssoid, {
                 httpOnly: true,
@@ -67,21 +67,21 @@ module.exports = function (options = {}) {
 
             let ssoid = cookies["sso"];
             if (ssoid == null) {
-                authenticateUrl.searchParams.set("origin", encodeURIComponent(origin));
+                authenticateUrl.searchParams.set("origin", origin);
                 return res.redirect(authenticateUrl.href);
             }
             res.cookie("sso", "", { httpOnly: true, maxAge: 0, secure });
 
             let user;
             try {
-                verifyUrl.searchParams.set("sso", encodeURIComponent(ssoid));
-                verifyUrl.searchParams.set("api_key", encodeURIComponent(apiKey));
+                verifyUrl.searchParams.set("sso", ssoid);
+                verifyUrl.searchParams.set("api_key", apiKey);
 
                 const response = await axios.get(verifyUrl.href);
                 user = response.data;
             } catch (err) {
                 if (err.response && err.response.status === 404) {
-                    authenticateUrl.searchParams.set("origin", encodeURIComponent(origin));
+                    authenticateUrl.searchParams.set("origin", origin);
                     return res.redirect(authenticateUrl.href);
                 } else {
                     throw err;
