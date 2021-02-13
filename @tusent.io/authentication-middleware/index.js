@@ -28,7 +28,7 @@ module.exports = function (options = {}) {
         ssoCookieLifetime = 10000,
         apiKey = "none",
         errorHandler = (_, res) => {
-            res.status(400).send("Bad Request");
+            res.sendStatus(400);
         },
     } = options;
 
