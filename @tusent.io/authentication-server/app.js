@@ -9,7 +9,7 @@ const tokenStore = require("./token-store.js");
 const app = express();
 app.use(cookieParser());
 
-const apiKeys = new Set(process.env.API_KEYS.split(/;\s*/));
+const apiKeys = new Set(process.env.API_KEYS.split(/\s*;\s*/));
 
 /**
  * Identify user (if logged in, else assign guest user) and register temporary authentication token.
