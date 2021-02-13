@@ -31,7 +31,7 @@ app.get("/authenticate", filterQueries("origin"), (req, res) => {
 
         return res.redirect(origin.href);
     } catch {
-        return res.status(400).send("Bad Request");
+        return res.sendStatus(400);
     }
 });
 
@@ -40,14 +40,14 @@ app.get("/verify", filterQueries("sso", "api_key"), (req, res) => {
     const apiKey = req.query["api_key"];
 
     if (!apiKeys.has(apiKey)) {
-        return res.status(403).send("Forbidden");
+        return res.sendStatus(403);
     }
 
     const ssoid = req.query["sso"];
     const user = tokenStore.use(ssoid);
 
     if (user == null) {
-        return res.status(404).send("Not Found");
+        return res.sendStatus(404);
     }
 
     return res.status(200).json(user);
