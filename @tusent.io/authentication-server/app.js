@@ -19,7 +19,7 @@ app.get("/authenticate", filterQueries("origin"), (req, res) => {
     let user = {};
 
     try {
-        user = jwt.verify(req.cookies["session"], process.env.JWT_KEY, { algorithms: ["HS256"] });
+        user = jwt.verify(req.cookies["session"], process.env.JWT_SECRET);
     } catch {
         res.cookie("session", "", { maxAge: 0, httpOnly: true, secure: process.env.PORT === 443 });
     }
