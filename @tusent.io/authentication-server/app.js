@@ -12,7 +12,7 @@ app.use(cookieParser());
 const apiKeys = new Set(process.env.API_KEYS.split(/\s*;\s*/));
 
 /**
- * Identify user (if logged in, else assign guest user) and register temporary authentication token.
+ * Identify user (if logged in, else assign guest user) and create a temporary authentication token.
  * Redirect to origin with an additional SSO query string containing the token ID.
  */
 app.get("/authenticate", filterQueries("origin"), (req, res) => {
@@ -26,7 +26,7 @@ app.get("/authenticate", filterQueries("origin"), (req, res) => {
 
     try {
         const origin = new URL(req.query["origin"]);
-        const ssoid = tokenStore.register(user);
+        const ssoid = tokenStore.create(user);
         origin.searchParams.set("sso", ssoid);
 
         return res.redirect(origin.href);
@@ -44,7 +44,7 @@ app.get("/verify", filterQueries("sso", "api_key"), (req, res) => {
     }
 
     const ssoid = req.query["sso"];
-    const user = tokenStore.use(ssoid);
+    const user = tokenStore.consume(ssoid);
 
     if (user == null) {
         return res.sendStatus(404);
