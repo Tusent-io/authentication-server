@@ -3,7 +3,7 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const express = require("express");
-const filterQueries = require("@tusent.io/filter-queries")();
+const filterQueries = require("@tusent.io/filter-queries");
 const tokenStore = require("./token-store.js");
 
 const app = express();
@@ -15,7 +15,7 @@ const apiKeys = new Set(process.env.API_KEYS.split(/\s*;\s*/));
  * Identify user (if logged in, else assign guest user) and create a temporary authentication token.
  * Redirect to origin with an additional SSO query string containing the token ID.
  */
-app.get("/authenticate", filterQueries("origin"), (req, res) => {
+app.all("/authenticate", filterQueries(["origin"]), (req, res) => {
     let user = {};
 
     try {
@@ -29,14 +29,14 @@ app.get("/authenticate", filterQueries("origin"), (req, res) => {
         const ssoid = tokenStore.create(user);
         origin.searchParams.set("sso", ssoid);
 
-        return res.redirect(origin.href);
+        return res.redirect(307, origin.href);
     } catch {
         return res.sendStatus(400);
     }
 });
 
 // API
-app.get("/verify", filterQueries("sso", "api_key"), (req, res) => {
+app.get("/verify", filterQueries(["sso", "api_key"]), (req, res) => {
     const apiKey = req.query["api_key"];
 
     if (!apiKeys.has(apiKey)) {

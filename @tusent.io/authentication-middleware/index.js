@@ -49,7 +49,7 @@ module.exports = function (options = {}) {
                 secure,
             });
 
-            return res.redirect(origin);
+            return res.redirect(307, origin);
         }
 
         try {
@@ -68,7 +68,7 @@ module.exports = function (options = {}) {
             let ssoid = cookies["sso"];
             if (ssoid == null) {
                 authenticateUrl.searchParams.set("origin", origin);
-                return res.redirect(authenticateUrl.href);
+                return res.redirect(307, authenticateUrl.href);
             }
             res.cookie("sso", "", { httpOnly: true, maxAge: 0, secure });
 
@@ -82,7 +82,7 @@ module.exports = function (options = {}) {
             } catch (err) {
                 if (err.response && err.response.status === 404) {
                     authenticateUrl.searchParams.set("origin", origin);
-                    return res.redirect(authenticateUrl.href);
+                    return res.redirect(307, authenticateUrl.href);
                 } else {
                     throw err;
                 }
