@@ -57,7 +57,7 @@ app.get("/verify", filterQueries(["sso", "api_key"]), (req, res) => {
     return res.json(user);
 });
 
-app.post("/force", filterQueries(["sso", "secret_key"]), (req, res) => {
+app.post("/force", filterQueries(["secret_key"]), (req, res) => {
     if (req.query["secret_key"] !== process.env.SECRET_KEY) {
         return res.sendStatus(403);
     }
