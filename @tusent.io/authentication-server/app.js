@@ -11,6 +11,7 @@ const app = express();
 
 app.use(cors());
 app.use(cookieParser());
+app.use(express.json());
 
 const apiKeys = new Set(process.env.API_KEYS.split(/\s*;\s*/));
 
@@ -53,7 +54,21 @@ app.get("/verify", filterQueries(["sso", "api_key"]), (req, res) => {
         return res.sendStatus(404);
     }
 
-    return res.status(200).json(user);
+    return res.json(user);
+});
+
+app.post("/force", filterQueries(["sso", "secret_key"]), (req, res) => {
+    if (req.query["secret_key"] !== process.env.SECRET_KEY) {
+        return res.sendStatus(403);
+    }
+
+    if (req.body == null) {
+        return res.sendStatus(400);
+    }
+
+    const ssoid = tokenStore.create(req.body);
+
+    return res.json(ssoid);
 });
 
 app.listen(process.env.PORT, () => {
