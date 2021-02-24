@@ -3,10 +3,13 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const express = require("express");
+const cors = require("cors");
 const filterQueries = require("@tusent.io/filter-queries");
 const tokenStore = require("./token-store.js");
 
 const app = express();
+
+app.use(cors());
 app.use(cookieParser());
 
 const apiKeys = new Set(process.env.API_KEYS.split(/\s*;\s*/));
