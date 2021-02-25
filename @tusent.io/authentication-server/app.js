@@ -37,7 +37,7 @@ app.all("/authenticate", filterQueries(["origin"]), (req, res) => {
         const ssoid = tokenStore.create(user);
         origin.searchParams.set("sso", ssoid);
 
-        return req.wantsJSON()
+        return req.wantsJSON
             ? res.json({
                   url: origin.href,
               })

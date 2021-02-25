@@ -1,7 +1,5 @@
 {
     "name": "@tusent.io/authentication-server",
-    "version": "1.0.0",
-    "description": "",
     "main": "app.js",
     "private": true,
     "scripts": {
