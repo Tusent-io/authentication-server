@@ -40,8 +40,8 @@ module.exports = function (options = {}) {
     return async function authenticate(req, res, next) {
         const origin = getOrigin(req);
 
-        req.corsRedirect = (path) => {
-            return req.xhr
+        req.axiosRedirect = (path) => {
+            return req.wantsJSON()
                 ? res.json({
                       url: path,
                   })
@@ -57,7 +57,7 @@ module.exports = function (options = {}) {
                 secure,
             });
 
-            return req.corsRedirect(origin);
+            return req.axiosRedirect(origin);
         }
 
         try {
@@ -77,7 +77,7 @@ module.exports = function (options = {}) {
             if (ssoid == null) {
                 authenticateUrl.searchParams.set("origin", origin);
 
-                return req.corsRedirect(authenticateUrl.href);
+                return req.axiosRedirect(authenticateUrl.href);
             }
 
             res.cookie("sso", "", { httpOnly: true, maxAge: 0, secure });
@@ -93,7 +93,7 @@ module.exports = function (options = {}) {
                 if (err.response && err.response.status === 404) {
                     authenticateUrl.searchParams.set("origin", origin);
 
-                    return req.corsRedirect(authenticateUrl.href);
+                    return req.axiosRedirect(authenticateUrl.href);
                 } else {
                     throw err;
                 }

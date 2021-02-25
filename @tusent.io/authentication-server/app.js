@@ -37,14 +37,11 @@ app.all("/authenticate", filterQueries(["origin"]), (req, res) => {
         const ssoid = tokenStore.create(user);
         origin.searchParams.set("sso", ssoid);
 
-        switch (req.query["redirect"]) {
-            case "0":
-                return res.json({
-                    url: origin.href,
-                });
-            default:
-                return res.redirect(307, origin.href);
-        }
+        return req.wantsJSON()
+            ? res.json({
+                  url: origin.href,
+              })
+            : res.redirect(307, origin.href);
     } catch {
         return res.sendStatus(400);
     }
