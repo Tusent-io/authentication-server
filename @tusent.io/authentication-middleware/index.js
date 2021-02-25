@@ -41,7 +41,7 @@ module.exports = function (options = {}) {
         const origin = getOrigin(req);
 
         req.axiosRedirect = (path) => {
-            return req.wantsJSON
+            return req.accepts(["json"])
                 ? res.json({
                       url: path,
                   })
