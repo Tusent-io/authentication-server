@@ -24,8 +24,9 @@ const apiKeys = new Set(process.env.API_KEYS.split(/\s*;\s*/));
  * Redirect to origin with an additional SSO query string containing the token ID.
  */
 app.all("/authenticate", filterQueries(["origin"]), (req, res) => {
-    let user = {};
+    const wantsJSON = req.accepts(["application/json", "*/*"]) === "application/json";
 
+    let user = {};
     try {
         user = jwt.verify(req.cookies["session"], process.env.JWT_SECRET);
     } catch {
@@ -37,11 +38,13 @@ app.all("/authenticate", filterQueries(["origin"]), (req, res) => {
         const ssoid = tokenStore.create(user);
         origin.searchParams.set("sso", ssoid);
 
-        return req.accepts(["json"])
-            ? res.json({
-                  url: origin.href,
-              })
-            : res.redirect(307, origin.href);
+        if (wantsJSON) {
+            return res.json({
+                url: origin.href,
+            });
+        } else {
+            return res.redirect(307, origin.href);
+        }
     } catch {
         return res.sendStatus(400);
     }

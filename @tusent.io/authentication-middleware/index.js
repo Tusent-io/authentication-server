@@ -38,15 +38,19 @@ module.exports = function (options = {}) {
     const secure = authenticateUrl.protocol.toLowerCase() === "https";
 
     return async function authenticate(req, res, next) {
-        const origin = getOrigin(req);
+        res.axiosRedirect = function (path) {
+            const wantsJSON = req.accepts(["application/json", "*/*"]) === "application/json";
 
-        req.axiosRedirect = (path) => {
-            return req.accepts(["json"])
-                ? res.json({
-                      url: path,
-                  })
-                : res.redirect(307, path);
+            if (wantsJSON) {
+                this.json({
+                    url: path,
+                });
+            } else {
+                this.redirect(307, path);
+            }
         };
+
+        const origin = getOrigin(req);
 
         if (req.query["sso"] != null && req.query["sso"].length > 0) {
             let ssoid = req.query["sso"];
@@ -57,7 +61,7 @@ module.exports = function (options = {}) {
                 secure,
             });
 
-            return req.axiosRedirect(origin);
+            return res.axiosRedirect(origin);
         }
 
         try {
@@ -77,7 +81,7 @@ module.exports = function (options = {}) {
             if (ssoid == null) {
                 authenticateUrl.searchParams.set("origin", origin);
 
-                return req.axiosRedirect(authenticateUrl.href);
+                return res.axiosRedirect(authenticateUrl.href);
             }
 
             res.cookie("sso", "", { httpOnly: true, maxAge: 0, secure });
@@ -93,7 +97,7 @@ module.exports = function (options = {}) {
                 if (err.response && err.response.status === 404) {
                     authenticateUrl.searchParams.set("origin", origin);
 
-                    return req.axiosRedirect(authenticateUrl.href);
+                    return res.axiosRedirect(authenticateUrl.href);
                 } else {
                     throw err;
                 }
