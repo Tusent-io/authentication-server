@@ -37,7 +37,14 @@ app.all("/authenticate", filterQueries(["origin"]), (req, res) => {
         const ssoid = tokenStore.create(user);
         origin.searchParams.set("sso", ssoid);
 
-        return res.redirect(307, origin.href);
+        switch (req.query["redirect"]) {
+            case "0":
+                return res.json({
+                    url: origin.href,
+                });
+            default:
+                return res.redirect(307, origin.href);
+        }
     } catch {
         return res.sendStatus(400);
     }
@@ -59,20 +66,6 @@ app.get("/verify", filterQueries(["sso", "api_key"]), (req, res) => {
     }
 
     return res.json(user);
-});
-
-app.post("/force", filterQueries(["secret_key"]), (req, res) => {
-    if (req.query["secret_key"] !== process.env.SECRET_KEY) {
-        return res.sendStatus(403);
-    }
-
-    if (req.body == null) {
-        return res.sendStatus(400);
-    }
-
-    const ssoid = tokenStore.create(req.body);
-
-    return res.json(ssoid);
 });
 
 app.listen(process.env.PORT, () => {
