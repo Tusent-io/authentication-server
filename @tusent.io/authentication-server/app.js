@@ -9,7 +9,11 @@ const tokenStore = require("./token-store.js");
 
 const app = express();
 
-app.use(cors());
+app.use(
+    cors({
+        credentials: true,
+    })
+);
 app.use(cookieParser());
 app.use(express.json());
 
