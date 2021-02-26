@@ -41,7 +41,7 @@ app.all("/authenticate", filterQueries(["origin"]), (req, res) => {
 
         if (wantsJSON) {
             return res.json({
-                url: origin.href,
+                __redirect: origin.href,
             });
         } else {
             return res.redirect(307, origin.href);

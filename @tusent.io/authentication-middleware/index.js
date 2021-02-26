@@ -43,7 +43,7 @@ module.exports = function (options = {}) {
 
             if (wantsJSON) {
                 this.json({
-                    url: path,
+                    __redirect: path,
                 });
             } else {
                 this.redirect(307, path);
