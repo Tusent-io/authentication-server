@@ -35,7 +35,7 @@ module.exports = function (options = {}) {
     const authenticateUrl = new URL(options.authenticateUrl);
     const verifyUrl = new URL(options.verifyUrl);
 
-    const secure = authenticateUrl.protocol.toLowerCase() === "https";
+    const secure = authenticateUrl.protocol === "https:";
 
     return async function authenticate(req, res, next) {
         res.axiosRedirect = function (path) {
