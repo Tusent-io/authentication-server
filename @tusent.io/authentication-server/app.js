@@ -7,7 +7,6 @@ const cors = require("cors");
 const filterQueries = require("@tusent.io/filter-queries");
 const TokenStore = require("@tusent.io/token-store");
 const mongoose = require("mongoose");
-const tokenStore = require("./token-store.js");
 
 // Connect to database
 mongoose.connect(process.env.DATABASE, {
