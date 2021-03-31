@@ -5,7 +5,23 @@ const jwt = require("jsonwebtoken");
 const express = require("express");
 const cors = require("cors");
 const filterQueries = require("@tusent.io/filter-queries");
+const TokenStore = require("@tusent.io/token-store");
+const mongoose = require("mongoose");
 const tokenStore = require("./token-store.js");
+
+// Connect to database
+mongoose.connect(process.env.DATABASE, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
+
+const ssoTokenStore = new TokenStore(
+    "SSO",
+    {
+        user: mongoose.SchemaTypes.Mixed,
+    },
+    10
+);
 
 const app = express();
 
@@ -24,7 +40,7 @@ const apiKeys = new Set(process.env.API_KEYS.split(/\s*;\s*/));
  * Identify user (if logged in, else assign guest user) and create a temporary authentication token.
  * Redirect to origin with an additional SSO query string containing the token ID.
  */
-app.all("/authenticate", filterQueries(["origin"]), (req, res) => {
+app.all("/authenticate", filterQueries(["origin"]), async (req, res) => {
     const wantsJSON = req.accepts(["application/json", "*/*"]) === "application/json";
 
     let user = {};
@@ -36,7 +52,7 @@ app.all("/authenticate", filterQueries(["origin"]), (req, res) => {
 
     try {
         const origin = new URL(req.query["origin"]);
-        const ssoid = tokenStore.create(user);
+        const ssoid = await ssoTokenStore.create({ user });
         origin.searchParams.set("sso", ssoid);
 
         if (wantsJSON) {
@@ -52,7 +68,7 @@ app.all("/authenticate", filterQueries(["origin"]), (req, res) => {
 });
 
 // API
-app.get("/verify", filterQueries(["sso", "api_key"]), (req, res) => {
+app.get("/verify", filterQueries(["sso", "api_key"]), async (req, res) => {
     const apiKey = req.query["api_key"];
 
     if (!apiKeys.has(apiKey)) {
@@ -60,13 +76,15 @@ app.get("/verify", filterQueries(["sso", "api_key"]), (req, res) => {
     }
 
     const ssoid = req.query["sso"];
-    const user = tokenStore.consume(ssoid);
 
-    if (user == null) {
+    try {
+        const token = await ssoTokenStore.consume(ssoid);
+        if (token == null) throw {};
+
+        return res.json(token.user ?? {});
+    } catch {
         return res.sendStatus(404);
     }
-
-    return res.json(user);
 });
 
 app.listen(process.env.PORT, () => {
