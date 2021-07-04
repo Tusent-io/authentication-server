@@ -1,6 +1,5 @@
-const cookieParser = require("cookie-parser")();
+const cookie = require("cookie");
 const axios = require("axios").default;
-const util = require("util");
 
 /**
  * Get the full requested URL and filter out any query strings with the name "sso".
@@ -65,22 +64,11 @@ module.exports = function (options = {}) {
         }
 
         try {
-            let cookies = req.cookies;
+            const cookies = cookie.parse(req.headers.cookie ?? "");
+            const ssoid = cookies["sso"];
 
-            // Get cookies using cookie-parser but leave nothing behind in req.
-            if (typeof cookies != "object") {
-                await util.promisify(cookieParser)(req, res);
-                cookies = req.cookies;
-
-                delete req.secret;
-                delete req.cookies;
-                delete req.signedCookies;
-            }
-
-            let ssoid = cookies["sso"];
             if (ssoid == null) {
                 authenticateUrl.searchParams.set("origin", origin);
-
                 return res.axiosRedirect(authenticateUrl.href);
             }
 
@@ -96,7 +84,6 @@ module.exports = function (options = {}) {
             } catch (err) {
                 if (err.response && err.response.status === 404) {
                     authenticateUrl.searchParams.set("origin", origin);
-
                     return res.axiosRedirect(authenticateUrl.href);
                 } else {
                     throw err;
