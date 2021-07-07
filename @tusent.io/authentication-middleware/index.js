@@ -13,7 +13,7 @@ module.exports = function (options = {}) {
     const {
         ssoCookieLifetime = 10000,
         apiKey = "none",
-        errorHandler = (_, res) => {
+        errorHandler = (req, res) => {
             console.error(req.error);
             res.sendStatus(500);
         },
