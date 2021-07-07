@@ -2,19 +2,6 @@ const cookie = require("cookie");
 const axios = require("axios").default;
 
 /**
- * Get the full requested URL and filter out any query strings with the name "sso".
- */
-function getOrigin(req) {
-    let origin = `${req.protocol}://${req.get("host")}${req.baseUrl + req.path}?`;
-
-    for (let [key, value] of Object.entries(req.query)) {
-        if (key != "sso") origin += `${key}=${value}&`;
-    }
-
-    return origin.substr(0, origin.length - 1);
-}
-
-/**
  * @param {object} [options]
  * @param {string} options.authenticateUrl
  * @param {string} options.verifyUrl
@@ -49,10 +36,13 @@ module.exports = function (options = {}) {
             }
         };
 
-        const origin = getOrigin(req);
+        const originUrl = new URL(`${authenticateUrl.protocol}//${req.hostname}${req.originalUrl}`);
+        originUrl.searchParams.delete("sso");
+
+        const origin = originUrl.href;
 
         if (req.query["sso"] != null && req.query["sso"].length > 0) {
-            let ssoid = req.query["sso"];
+            const ssoid = req.query["sso"];
 
             res.cookie("sso", ssoid, {
                 httpOnly: true,
@@ -74,13 +64,12 @@ module.exports = function (options = {}) {
 
             res.cookie("sso", "", { httpOnly: true, maxAge: 0, secure });
 
-            let user;
             try {
                 verifyUrl.searchParams.set("sso", ssoid);
                 verifyUrl.searchParams.set("api_key", apiKey);
 
                 const response = await axios.get(verifyUrl.href);
-                user = response.data;
+                req.user = response.data;
             } catch (err) {
                 if (err.response && err.response.status === 404) {
                     authenticateUrl.searchParams.set("origin", origin);
@@ -89,8 +78,6 @@ module.exports = function (options = {}) {
                     throw err;
                 }
             }
-
-            req.user = user;
         } catch {
             return errorHandler(req, res, next);
         }
