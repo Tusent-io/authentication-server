@@ -14,7 +14,8 @@ module.exports = function (options = {}) {
         ssoCookieLifetime = 10000,
         apiKey = "none",
         errorHandler = (_, res) => {
-            res.sendStatus(400);
+            console.error(req.error);
+            res.sendStatus(500);
         },
     } = options;
 
@@ -78,7 +79,8 @@ module.exports = function (options = {}) {
                     throw err;
                 }
             }
-        } catch {
+        } catch (error) {
+            req.error = error;
             return errorHandler(req, res, next);
         }
 
