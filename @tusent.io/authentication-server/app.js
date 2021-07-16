@@ -1,3 +1,5 @@
+/** @format */
+
 require("dotenv").config();
 
 const cookieParser = require("cookie-parser");
@@ -46,7 +48,12 @@ app.all("/authenticate", filterQueries(["origin"]), async (req, res) => {
     try {
         user = jwt.verify(req.cookies["session"], process.env.JWT_SECRET);
     } catch {
-        res.cookie("session", "", { maxAge: 0, httpOnly: true, secure: process.env.PORT === 443 });
+        res.cookie("session", "", {
+            maxAge: 0,
+            httpOnly: true,
+            sameSite: "strict",
+            secure: process.env.PORT === 443,
+        });
     }
 
     try {
