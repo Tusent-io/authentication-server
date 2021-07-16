@@ -1,3 +1,5 @@
+/** @format */
+
 const cookie = require("cookie");
 const axios = require("axios").default;
 
@@ -47,6 +49,7 @@ module.exports = function (options = {}) {
 
             res.cookie("sso", ssoid, {
                 httpOnly: true,
+                sameSite: "strict",
                 maxAge: ssoCookieLifetime,
                 secure,
             });
@@ -63,7 +66,12 @@ module.exports = function (options = {}) {
                 return res.axiosRedirect(authenticateUrl.href);
             }
 
-            res.cookie("sso", "", { httpOnly: true, maxAge: 0, secure });
+            res.cookie("sso", "", {
+                httpOnly: true,
+                sameSite: "strict",
+                maxAge: 0,
+                secure,
+            });
 
             try {
                 verifyUrl.searchParams.set("sso", ssoid);
